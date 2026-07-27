@@ -97,6 +97,74 @@
       </div>
     </div>
   </div>
+  import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { Mic, Hand, Users, Lock } from 'lucide-react-native';
+
+export default function LivePurpleRoom() {
+  const [participants] = useState(Array(6).fill(null).map((_, i) => ({
+    id: String(i),
+    speaking: i === 0, // first person on stage
+    isYou: i === 5
+  })));
+
+  const isFull = participants.length >= 6;
+
+  return (
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.title}>Live Purple Room</Text>
+        <Text style={styles.subject}>Mathematics</Text>
+        <View style={styles.groupInfo}>
+          <Users size={16} color="#E0AAFF" />
+          <Text style={styles.groupText}> {participants.length}/6 in group</Text>
+          {isFull && <Lock size={14} color="#C77DFF" />}
+        </View>
+      </View>
+
+      {/* Stage */}
+      <View style={styles.stage}>
+        <Mic size={48} color="#C77DFF" />
+        <Text style={styles.stageText}>On Stage</Text>
+        <View style={styles.waveform} />
+      </View>
+
+      {/* 6 Anonymous Avatars Grid */}
+      <View style={styles.grid}>
+        {participants.map((p) => (
+          <View key={p.id} style={styles.avatarWrap}>
+            <View style={[styles.avatar, p.speaking && styles.avatarSpeaking]}>
+              <View style={styles.silhouette} />
+            </View>
+            <Text style={styles.avatarLabel}>
+              {p.isYou? 'You' : ''}
+            </Text>
+          </View>
+        ))}
+        {/* Empty slots if less than 6 */}
+        {Array.from({ length: 6 - participants.length }).map((_, i) => (
+          <View key={`empty-${i}`} style={[styles.avatar, styles.emptyAvatar]}>
+            <Text style={styles.plus}>+</Text>
+          </View>
+        ))}
+      </View>
+
+      {/* Room Full Message */}
+      {isFull && (
+        <View style={styles.fullBanner}>
+          <Text style={styles.fullText}>Group full. Join the next room 💜</Text>
+        </View>
+      )}
+
+      {/* Buttons */}
+      <View style={styles.actions}>
+        <TouchableOpacity style={styles.btnPrimary} disabled={isFull}>
+          <Mic size={18} color="#fff" />
+          <Text style={styles.btnText}>Join Stage</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btnSecondary}>
+          <Hand size={18} color="#
 <style>
   body { 
   font-family: Arial; 
@@ -132,6 +200,14 @@ p {
   display: flex; 
   justify-content: center; 
   gap: 12px; 
+            import { Colors, Fonts, Styles } from './theme';
+
+<View style={Styles.card}>
+  <Text style={Fonts.title}>Live Purple Room</Text>
+  <TouchableOpacity style={Styles.btnPrimary}>
+    <Text style={{color: Colors.text}}>Join Stage</Text>
+  </TouchableOpacity>
+</View>
 </style>
 </body>
 </html>
